@@ -1,0 +1,66 @@
+Nume: Coman Diana Stefania
+Grupa: 335CA
+Tema: 2. Optimizari
+Dificultate: Usoara
+
+######################################################################
+Implementarea:
+	Varianta neoptimizata:
+	Se implementeaza operatia in mod clasic. Se aloca spatiu pentru At,
+	trei matrici auxiliare si rezultat. Se calculeaza A transpus in At.
+	In aux1 se calculeaza A^2, tinand cont ca este superior triunghiulara
+	In aux2 se calculeaza A^2*B, iar in aux3 se calculeaza B*At.
+	in rez se face suma lui aux2 si aux3.
+	
+	Varianta optimizata:
+	In cazul variantei optimizate complexitatea este aceeasi cu a variantei 
+	neoptimizate - O(N^3)
+	Se folosesc pointeri pentru optimizarea accesului la memorie pe linii si 
+	coloane iar suma se face astfel incat nu sa nu se acceseze memoria matricii
+	decat la N operatii.
+
+	Varianta optimizata cu flags (opt_f):
+	se compileaza cu flagul -O3
+	
+	Varianta optimizata cu flags (opt_f_extra):
+	Am ales sa folosesc urmatoarele flaguri:
+	
+	-ffast-math - nu este neaparat sigur pentru orice fel de operatii, insa in urma 
+	testarii, nu se depaseste marja de eroare ceruta
+	-fexcess-precision=fast - precizia este mai larga, din nou nu este neaparat o
+	operatie sigura, insa rezultatul se incadreaza in marja de eroare data
+	-fira-loop-pressure - foloseste IRA pt registrii in loop.
+	-flto - face posibila optimizarea timpului de link-are
+	In urma rularii efectuate de mai multe ori a programului, am observat ca obtin 
+	o imbunatatire de peste 5% a timpului fata de opt_f.
+	
+	Varianta BLAS:
+	
+	Am folosit functiile dgemm si dtrmm.
+	La inmultiirea cu B transpus, am activat flag-ul de transpunere, apoi
+	am folosit dtrmm pentru ridicarea lui A la patrat, avand in vedere ca aceasta
+	matrice este supra triunghiulara. Apoi rezultatul se inmulteste cu B folosind 
+	dgemm.
+	Se aduna cele doua matrici rezultate si se intoarce rezultatul.
+
+##################################################################################
+Graficele: 
+	Toate graficele sunt atasate in arhiva, in grafice.xlsx
+##################################################################################
+Analiza: blas vs neopt vs opt_m vs opt_f vs opt_f_extra
+
+	Avand in vedere graficele rezultate:
+	
+	Varianta blas a fost de departe cea mai rapida, data fiind optimizarile facute 
+	pe inmultirea matricelor din biblioteca atlas.
+	
+	Evident, varianta cea mai lenta a fost cea neoptimizata.
+	
+	In cazul neopt vs opt_m, se observa o reducere semnificativa a timpului, aproximativ
+	la jumatate, in urma optimizarilor facute.
+	
+	In cazul opt_m vs opt_f se observa cum, folosind optimizarile din -O3 se scade timpului
+	fata de optimizarea realizata de mine
+	
+	Se observa si o usoare imbunatatire la opt_f vs opt_f_extra. In urma folosirii flag-urilor
+	prezentate mai sus, se reduce inca putin timpul.
